@@ -10,7 +10,7 @@ function SalesHistory({ sales, products }) {
  
 
     return (
-        <div className="text-center">
+        <div className="text-center overflow-x-auto">
             <button
                 className="text-s font-bold text-gray-500 rounded  "
                 onClick={toggleDropdown}
@@ -19,7 +19,7 @@ function SalesHistory({ sales, products }) {
                 TAP TO SEE DAILY SALES
             </button>
             {isOpen && (
-                <table className="table-auto w-full border-collapse border border-gray-300 mt-3">
+                <table className=" min-w-full divide-y  border border-gray-300 mt-3">
                     <thead className="bg-gray-200 ">
                         <tr>
                         <th scope="col" className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">

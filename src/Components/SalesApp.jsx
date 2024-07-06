@@ -3,26 +3,28 @@ import ProductForm from './ProductForm';
 import ProductList from './ProductList';
 import SalesHistory from './SalesHistory';
 import SellPopup from './SellPopup';
+import TopSellingProducts from './TopSellingProducts';
+import { motion } from 'framer-motion';
 
 function SalesApp() {
     const [products, setProducts] = useState([]);
     const [sales, setSales] = useState([]);
-    const [sellingProduct, setSellingProduct] = useState(null); // State to track the product being sold
-
-    // Function to add a new product
+    const [sellingProduct, setSellingProduct] = useState(null); 
+console.log(sales,'salles');
+ 
     const addProduct = (name, price, count) => {
         const newProduct = {
             id: products.length + 1,
             name,
             price,
             count,
-            inStock: count, // Initial count is set as inStock when adding the product
+            inStock: count, 
             totalRevenue: 0
         };
         setProducts([...products, newProduct]);
     };
 
-    // Function to sell a product
+
     const sellProduct = (productId, quantity, price) => {
         setProducts(prevProducts => {
             return prevProducts.map(product => {
@@ -35,25 +37,25 @@ function SalesApp() {
             });
         });
 
-        // Record the sale in sales history
         const soldProduct = products.find(product => product.id === productId);
+     
         if (soldProduct) {
             setSales(prevSales => [
                 ...prevSales,
-                { productId, quantity, price, saleDate: new Date() }
+                { productId, quantity, name:soldProduct.name, saleDate: new Date() }
             ]);
         }
 
-        // Close the sell popup
+   
         setSellingProduct(null);
     };
 
-    // Function to open the sell popup
+
     const openSellPopup = (productId) => {
         setSellingProduct(productId);
     };
 
-    // Function to close the sell popup
+  
     const closeSellPopup = () => {
         setSellingProduct(null);
     };
@@ -66,51 +68,78 @@ function SalesApp() {
     return (
         <div className="container mx-auto px-4 py-8">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                {/* Product Form Component */}
                 <div className="lg:col-span-1">
                     <ProductForm addProduct={addProduct} />
                 </div>
-
-                {/* Product List and Sales History */}
                 <div className="lg:col-span-2 space-y-6">
-                    <div className="bg-yellow-200 rounded-lg shadow-md p-6 ">
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.5 }}
+                        className="bg-gray-200 rounded-lg shadow-md p-6"
+                    >
                         <ProductList products={products} openSellPopup={openSellPopup} />
-                    </div>
-                    <div className="bg-white rounded-lg shadow-md p-6">
+                    </motion.div>
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.5, delay: 0.2 }}
+                        className="bg-white rounded-lg shadow-md p-6"
+                    >
                         <SalesHistory sales={sales} />
-                    </div>
+                    </motion.div>
                 </div>
             </div>
 
-            {/* Sell Popup Component */}
-            {sellingProduct !== null && (
-                <SellPopup
-                    productId={sellingProduct}
-                    productName={products.find(p => p.id === sellingProduct)?.name}
-                    productCount={products.find(p => p.id === sellingProduct)?.count}
-                    productPrice={products.find(p => p.id === sellingProduct)?.price}
-                    sellProduct={sellProduct}
-                    closeSellPopup={closeSellPopup}
-                />
-            )}
-
-            {/* Summary Section */}
-            <div className="mt-8 bg-white rounded-lg shadow-md p-6">
-          
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <p className="text-lg font-bold mb-2">Grand Total Revenue</p>
-                        <p className="text-3xl text-blue-500">${grandTotalRevenue.toFixed(2)}</p>
+            <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5, delay: 0.4 }}
+                className="mt-8 bg-white rounded-lg shadow-md p-6 w-full md:w-1/9 lg:w-1/3 ml-auto"
+            >
+                <div className="grid grid-cols-1 gap-4 text-center">
+                    <div className='font-bold'>
+                        <motion.p
+                            initial={{ scale: 0.8 }}
+                            animate={{ scale: 1 }}
+                            transition={{ duration: 0.3 }}
+                            className="text-lg font-bold mb-2 bg-blue-900 rounded text-white p-2"
+                        >
+                            Grand Total Revenue
+                        </motion.p>
+                        <motion.p
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 0.5, delay: 0.5 }}
+                            className="text-3xl text-blue-500"
+                        >
+                            ${grandTotalRevenue.toFixed(2)}
+                        </motion.p>
                     </div>
-                   
                 </div>
-            </div>
-
-            {/* Product Details Section */}
-            <div className="mt-8 bg-white rounded-lg shadow-md p-6">
-                <h2 className="text-2xl font-bold mb-4">Product Details</h2>
+            </motion.div>
+            <motion.div
+             initial={{ opacity: 0 }}
+             animate={{ opacity: 1 }}
+             transition={{ duration: 0.5, delay: 0.6 }}
+            >
+            <TopSellingProducts sales={sales} products={products} />
+            </motion.div>
+           
+            <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5, delay: 0.7 }}
+                className="mt-8 bg-white rounded-lg shadow-md p-6"
+            >
+                <h2 className="text-2xl font-bold mb-4 text-center text-gray-100 bg-gray-500 p-3 rounded">Products Details</h2>
                 <div className="overflow-x-auto">
-                    <table className="min-w-full divide-y divide-gray-200">
+                    <motion.table
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.5, delay: 0.7 }}
+                        className="min-w-full divide-y divide-gray-200"
+                    >
                         <thead className="bg-gray-50">
                             <tr>
                                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -120,7 +149,7 @@ function SalesApp() {
                                     Price
                                 </th>
                                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Initial Count
+                                    Stock
                                 </th>
                                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     In Stock
@@ -135,22 +164,40 @@ function SalesApp() {
                         </thead>
                         <tbody className="bg-white divide-y divide-gray-200">
                             {products.map(product => (
-                                <tr key={product.id}>
+                                <motion.tr
+                                    key={product.id}
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    transition={{ duration: 0.5 }}
+                                >
                                     <td className="px-6 py-4 whitespace-nowrap">{product.name}</td>
                                     <td className="px-6 py-4 whitespace-nowrap">${product.price.toFixed(2)}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap">{product.count}</td>
                                     <td className="px-6 py-4 whitespace-nowrap">{product.inStock}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap">{product.count}</td>
                                     <td className="px-6 py-4 whitespace-nowrap">
                                         {sales.filter(sale => sale.productId === product.id)
                                             .reduce((total, sale) => total + sale.quantity, 0)}
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">${product.totalRevenue.toFixed(2)}</td>
-                                </tr>
+                                </motion.tr>
                             ))}
                         </tbody>
-                    </table>
+                    </motion.table>
                 </div>
-            </div>
+            </motion.div>
+            
+          
+
+            {sellingProduct !== null && (
+                <SellPopup
+                    productId={sellingProduct}
+                    productName={products.find(p => p.id === sellingProduct)?.name}
+                    productCount={products.find(p => p.id === sellingProduct)?.count}
+                    productPrice={products.find(p => p.id === sellingProduct)?.price}
+                    sellProduct={sellProduct}
+                    closeSellPopup={closeSellPopup}
+                />
+            )}
         </div>
     );
 }
